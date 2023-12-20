@@ -5,7 +5,7 @@ import org.openmrs.module.kenyaemr.cashier.api.ICashierItemPriceService;
 import org.openmrs.module.kenyaemr.cashier.api.base.entity.IEntityDataService;
 import org.openmrs.module.kenyaemr.cashier.api.model.CashierItemPrice;
 import org.openmrs.module.kenyaemr.cashier.base.resource.BaseRestDataResource;
-import org.openmrs.module.kenyaemr.cashier.rest.controller.CashierResourceController;
+import org.openmrs.module.kenyaemr.cashier.rest.controller.base.CashierResourceController;
 import org.openmrs.module.stockmanagement.api.StockManagementService;
 import org.openmrs.module.stockmanagement.api.model.StockItem;
 import org.openmrs.module.webservices.rest.web.RestConstants;
