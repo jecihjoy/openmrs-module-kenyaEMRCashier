@@ -14,29 +14,48 @@
 
 package org.openmrs.module.kenyaemr.cashier.api.impl;
 
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.openmrs.module.kenyaemr.cashier.api.IPaymentModeService;
 import org.openmrs.module.kenyaemr.cashier.api.base.entity.impl.BaseMetadataDataServiceImpl;
 import org.openmrs.module.kenyaemr.cashier.api.base.entity.security.IMetadataAuthorizationPrivileges;
+import org.openmrs.module.kenyaemr.cashier.api.base.f.Action1;
+import org.openmrs.module.kenyaemr.cashier.api.model.BillableService;
 import org.openmrs.module.kenyaemr.cashier.api.model.PaymentMode;
+import org.openmrs.module.kenyaemr.cashier.api.search.BillableServiceSearch;
+import org.openmrs.module.kenyaemr.cashier.api.search.PaymentModeSearch;
 import org.openmrs.module.kenyaemr.cashier.api.security.BasicMetadataAuthorizationPrivileges;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Data service implementation class for {@link PaymentMode}s.
  */
 @Transactional
 public class PaymentModeServiceImpl extends BaseMetadataDataServiceImpl<PaymentMode> implements IPaymentModeService {
-	@Override
-	protected IMetadataAuthorizationPrivileges getPrivileges() {
-		return new BasicMetadataAuthorizationPrivileges();
-	}
 
-	@Override
-	protected void validate(PaymentMode entity) {}
+    @Override
+    public List<PaymentMode> findPaymentModeByName(PaymentModeSearch search) {
+        return executeCriteria(PaymentMode.class, null, new Action1<Criteria>() {
+            @Override
+            public void apply(Criteria criteria) {
+                search.updateCriteria(criteria);
+            }
+        });
+    }
 
-	@Override
-	protected Order[] getDefaultSort() {
-		return new Order[] { Order.asc("sortOrder"), Order.asc("name") };
-	}
+    @Override
+    protected IMetadataAuthorizationPrivileges getPrivileges() {
+        return new BasicMetadataAuthorizationPrivileges();
+    }
+
+    @Override
+    protected void validate(PaymentMode entity) {
+    }
+
+    @Override
+    protected Order[] getDefaultSort() {
+        return new Order[]{Order.asc("sortOrder"), Order.asc("name")};
+    }
 }

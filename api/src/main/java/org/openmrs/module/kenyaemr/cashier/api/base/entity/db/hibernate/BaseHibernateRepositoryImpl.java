@@ -23,6 +23,7 @@ import org.openmrs.OpenmrsObject;
 import org.openmrs.api.APIException;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
+import org.openmrs.module.kenyaemr.cashier.api.model.PaymentMode;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -179,5 +180,18 @@ public class BaseHibernateRepositoryImpl implements BaseHibernateRepository {
 		}
 
 		return results;
+	}
+
+	@Override
+	public List<PaymentMode> getPaymentModeByName(String name) {
+		String stringQuery = "SELECT paymentMode FROM PaymentMode AS paymentMode WHERE retired = 0 and name = :name ";
+
+		Query query = this.sessionFactory.getCurrentSession().createQuery(
+				stringQuery);
+
+		if (!name.isEmpty()) {
+			query.setParameter("name", name);
+		}
+		return query.list();
 	}
 }

@@ -67,6 +67,7 @@ public class BillableServiceResource extends BaseRestDataResource<BillableServic
         searchTemplate.setServiceCategory(serviceCategory);
         searchTemplate.setServiceStatus(status);
 
+
         IBillableItemsService service = Context.getService(IBillableItemsService.class);
         return new AlreadyPaged<>(context, service.findServices(new BillableServiceSearch(searchTemplate, false)), false);
     }

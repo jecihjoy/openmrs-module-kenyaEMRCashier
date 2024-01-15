@@ -5,12 +5,13 @@ import org.openmrs.module.kenyaemr.cashier.api.IBillableItemsService;
 import org.openmrs.module.kenyaemr.cashier.api.base.entity.impl.BaseEntityDataServiceImpl;
 import org.openmrs.module.kenyaemr.cashier.api.base.entity.security.IEntityAuthorizationPrivileges;
 import org.openmrs.module.kenyaemr.cashier.api.base.f.Action1;
-import org.openmrs.module.kenyaemr.cashier.api.model.Bill;
 import org.openmrs.module.kenyaemr.cashier.api.model.BillableService;
-import org.openmrs.module.kenyaemr.cashier.api.search.BillSearch;
 import org.openmrs.module.kenyaemr.cashier.api.search.BillableServiceSearch;
+import org.openmrs.module.kenyaemr.cashier.jobs.BillableServicesImporter;
+import org.openmrs.module.kenyaemr.cashier.jobs.ImportResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @Transactional
@@ -25,6 +26,12 @@ public class BillableItemsServiceImpl extends BaseEntityDataServiceImpl<Billable
                 serviceSearch.updateCriteria(criteria);
             }
         });
+    }
+
+    public ImportResult importStockItems(Path file, boolean hasHeader) {
+        BillableServicesImporter importJob = new BillableServicesImporter(file, hasHeader);
+        importJob.execute();
+        return (ImportResult)importJob.getResult();
     }
 
     @Override

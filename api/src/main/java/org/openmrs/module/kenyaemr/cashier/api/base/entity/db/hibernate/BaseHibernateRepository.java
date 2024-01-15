@@ -20,6 +20,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.openmrs.OpenmrsObject;
+import org.openmrs.module.kenyaemr.cashier.api.model.PaymentMode;
 
 /**
  * Represents types that can provide access to a data source through hibernate.
@@ -125,4 +126,6 @@ public interface BaseHibernateRepository {
 	 * @should return an empty list when no entities are found
 	 */
 	<E extends OpenmrsObject> List<E> select(Class<E> cls, Criteria criteria);
+
+	List<PaymentMode> getPaymentModeByName(String name);
 }

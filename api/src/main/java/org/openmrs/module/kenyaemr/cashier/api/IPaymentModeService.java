@@ -15,11 +15,19 @@
 package org.openmrs.module.kenyaemr.cashier.api;
 
 import org.openmrs.module.kenyaemr.cashier.api.base.entity.IMetadataDataService;
+import org.openmrs.module.kenyaemr.cashier.api.model.BillableService;
 import org.openmrs.module.kenyaemr.cashier.api.model.PaymentMode;
+import org.openmrs.module.kenyaemr.cashier.api.search.BillableServiceSearch;
+import org.openmrs.module.kenyaemr.cashier.api.search.PaymentModeSearch;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Interface that represents classes which perform data operations for {@link PaymentMode}s.
  */
 @Transactional
-public interface IPaymentModeService extends IMetadataDataService<PaymentMode> {}
+public interface IPaymentModeService extends IMetadataDataService<PaymentMode> {
+    List<PaymentMode> findPaymentModeByName(final PaymentModeSearch search);
+
+}

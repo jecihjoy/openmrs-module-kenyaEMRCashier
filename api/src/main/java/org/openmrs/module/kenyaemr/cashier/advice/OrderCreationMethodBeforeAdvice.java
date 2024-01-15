@@ -28,50 +28,57 @@ public class OrderCreationMethodBeforeAdvice implements MethodBeforeAdvice {
 
     @Override
     public void before(Method method, Object[] args, Object target) throws Throwable {
-        try {
-            // Extract the Order object from the arguments
-            if (method.getName().equals("saveOrder") && args.length > 0 && args[0] instanceof Order) {
-                Order order = (Order) args[0];
-
-                // Check if the order already exists by looking at the database
-                if (orderService.getOrderByUuid(order.getUuid()) != null) {
-                    // This is an existing order being updated
-                    System.out.println("Order is being updated: " + order.getOrderId());
-                } else {
-                    // This is a new order
-                    System.out.println("New order is being created");
-                    // Add bill item to Bill
-                    Patient patient = order.getPatient();
-                    String patientUUID = patient.getUuid();
-                    String cashierUUID = Context.getAuthenticatedUser().getUuid();
-                    String cashpointUUID = Utils.getDefaultLocation().getUuid();
-                    System.out.println("Patient: " + patientUUID + " cashier: " + cashierUUID + " cash point: " + cashpointUUID);
-                    if(order instanceof DrugOrder) {
-                        System.out.println("Auto detect drug order");
-                        System.out.println("This is a drug order");
-                        DrugOrder drugOrder = (DrugOrder) order;
-                        Integer drugID = drugOrder.getDrug() != null ? drugOrder.getDrug().getDrugId() : 0;
-                        String drugUUID = drugOrder.getDrug() != null ? drugOrder.getDrug().getConcept().getUuid() : "";
-                        Double drugQuantity = drugOrder.getQuantity() != null ? drugOrder.getQuantity() : 0.0;
-                        StockItem stockitem = stockService.getStockItemByDrug(drugID);
-                        System.out.println("Drug id: " + drugID + " Drug UUID: " + drugUUID + " Drug Quantity: " + drugQuantity);
-                        addBillItemToBill(patient, cashierUUID, cashpointUUID, stockitem, drugQuantity.intValue(), order.getDateActivated());
-                    } else if(order instanceof TestOrder) {
-                        System.out.println("Auto detect lab order");
-                        System.out.println("This is a lab order");
-                        TestOrder testOrder = (TestOrder) order;
-                        Integer testID = testOrder.getId() != null ? testOrder.getId() : 0;
-                        String testUUID = testOrder.getUuid() != null ? testOrder.getUuid() : "";
-                        StockItem stockitem = stockService.getStockItemByConcept(testOrder.getConcept().getConceptId());
-                        System.out.println("Test id: " + testID + " Test UUID: " + testUUID);
-                        addBillItemToBill(patient, cashierUUID, cashpointUUID, stockitem, 1, order.getDateActivated());
-                    }
-                }
-            }
-        } catch(Exception e) {
-            System.err.println("Error intercepting order before creation: " + e.getMessage());
-            e.printStackTrace();
-        }
+        System.out.println("skipping bill creation");
+//        try {
+//            // Extract the Order object from the arguments
+//            if (method.getName().equals("saveOrder") && args.length > 0 && args[0] instanceof Order) {
+//                Order order = (Order) args[0];
+//                System.out.println("Skipping bill creation");
+//
+//                // Check if the order already exists by looking at the database
+//                if (orderService.getOrderByUuid(order.getUuid()) != null) {
+//                    // This is an existing order being updated
+//                    System.out.println("Order is being updated: " + order.getOrderId());
+//                } else {
+//                    // This is a new order
+//                    System.out.println("New order is being created");
+//                    // Add bill item to Bill
+//                    Patient patient = order.getPatient();
+//                    String patientUUID = patient.getUuid();
+//                    String cashierUUID = Context.getAuthenticatedUser().getUuid();
+//                    String cashpointUUID = Utils.getDefaultLocation().getUuid();
+//                    System.out.println("Patient: " + patientUUID + " cashier: " + cashierUUID + " cash point: " + cashpointUUID);
+//                    if(order instanceof DrugOrder) {
+//                        System.out.println("Auto detect drug order");
+//                        System.out.println("This is a drug order");
+//                        DrugOrder drugOrder = (DrugOrder) order;
+//                        Integer
+//                        drugID = drugOrder.getDrug() != null ? drugOrder.getDrug().getDrugId() : 0;
+//                        String drugUUID = drugOrder.getDrug() != null ? drugOrder.getDrug().getConcept().getUuid() : "";
+//                        Double drugQuantity = drugOrder.getQuantity() != null ? drugOrder.getQuantity() : 0.0;
+//                        List<StockItem> stockitem = stockService.getStockItemByDrug(drugID);
+//                        System.out.println("Drug id: " + drugID + " Drug UUID: " + drugUUID + " Drug Quantity: " + drugQuantity);
+//                        if (!stockitem.isEmpty()){
+//                            addBillItemToBill(patient, cashierUUID, cashpointUUID, stockitem.get(0), drugQuantity.intValue(), order.getDateActivated());
+//                        }
+//                    } else if(order instanceof TestOrder) {
+//                        System.out.println("Auto detect lab order");
+//                        System.out.println("This is a lab order");
+//                        TestOrder testOrder = (TestOrder) order;
+//                        Integer testID = testOrder.getId() != null ? testOrder.getId() : 0;
+//                        String testUUID = testOrder.getUuid() != null ? testOrder.getUuid() : "";
+//                        List<StockItem> stockitem = stockService.getStockItemByConcept(testOrder.getConcept().getConceptId());
+//                        System.out.println("Test id: " + testID + " Test UUID: " + testUUID);
+//                        if (!stockitem.isEmpty()) {
+//                            addBillItemToBill(patient, cashierUUID, cashpointUUID, stockitem.get(0), 1, order.getDateActivated());
+//                        }
+//                    }
+//                }
+//            }
+//        } catch(Exception e) {
+//            System.err.println("Error intercepting order before creation: " + e.getMessage());
+//            e.printStackTrace();
+//        }
     }
 
     /**

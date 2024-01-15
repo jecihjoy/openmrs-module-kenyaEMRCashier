@@ -12,6 +12,7 @@ import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
 import org.openmrs.module.webservices.rest.web.annotation.PropertySetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
+import org.openmrs.module.webservices.rest.web.representation.CustomRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
@@ -47,9 +48,14 @@ public class CashierItemPriceResource extends BaseRestDataResource<CashierItemPr
             description.addProperty("paymentMode");
             description.addProperty("item");
             description.addProperty("billableService", Representation.REF);
+        } else if (rep instanceof CustomRepresentation) {
+            //For custom representation, must be null
+            // - let the user decide which properties should be included in the response
+            description = null;
         }
         return description;
     }
+
     @Override
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription description = new DelegatingResourceDescription();
@@ -71,7 +77,7 @@ public class CashierItemPriceResource extends BaseRestDataResource<CashierItemPr
         double amount;
         if (price instanceof Integer) {
             int rawAmount = (Integer) price;
-            amount = Double.valueOf(rawAmount) ;
+            amount = Double.valueOf(rawAmount);
             instance.setPrice(BigDecimal.valueOf(amount));
         } else {
             instance.setPrice(BigDecimal.valueOf((Double) price));
@@ -84,6 +90,7 @@ public class CashierItemPriceResource extends BaseRestDataResource<CashierItemPr
         String itemUuid = (String) item;
         instance.setItem(service.getStockItemByUuid(itemUuid));
     }
+
     @PropertyGetter(value = "item")
     public String getItem(CashierItemPrice instance) {
         try {
