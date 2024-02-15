@@ -200,6 +200,7 @@ public class OrderCreationMethodBeforeAdvice implements MethodBeforeAdvice {
             billLineItem.setQuantity(quantity);
             billLineItem.setPaymentStatus(lineItemStatus);
             billLineItem.setLineItemOrder(0);
+            billLineItem.setOrder(order);
 
             // Bill
             User user = Context.getAuthenticatedUser();
